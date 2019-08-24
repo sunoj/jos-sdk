@@ -8,16 +8,18 @@ import { Utils } from './utils'
 const defaultConfig = {
   siteId: "280573243",
   format: 'json',
-  v: '2.0',
+  v: '1.0',
   apiUrl: 'https://router.jd.com/api'
 }
 
 const jdParser = {
   goodsInfo: {
     apiParser: 'jd.union.open.goods.promotiongoodsinfo.query',
+    responseParser: 'jd_union_open_goods_promotiongoodsinfo_query_response',
   },
   commonPromotion: {
     apiParser: 'jd.union.open.promotion.common.get',
+    responseParser: 'jd_union_open_promotion_common_get_response',
   }
 }
 
@@ -38,7 +40,7 @@ export class JDClient {
   public format: string
   public v: string
 
-  constructor (appKey: string, appSecret: string, accessToken: string, format: string = defaultConfig.format, v: string = defaultConfig.v, apiUrl: string = defaultConfig.apiUrl) {
+  constructor (appKey: string, appSecret: string, accessToken?: string, format: string = defaultConfig.format, v: string = defaultConfig.v, apiUrl: string = defaultConfig.apiUrl) {
     this.appKey = appKey
     this.appSecret = appSecret
     this.apiUrl = apiUrl
@@ -80,6 +82,7 @@ export class JDClient {
     }
     let sign = this.appSecret
     _.keys(sysParam).forEach((key) => {
+      if (_.isEmpty(sysParam[key])) return;
       let param = key + sysParam[key]
       params.push(param)
     })
@@ -101,12 +104,17 @@ export class JDClient {
    * @param appParam
    * @returns {Promise<any>}
    */
-  private async handleAPI (parser?: { apiParser: string }, appParam?: object) {
+  private async handleAPI (parser?: { apiParser: string, responseParser: string }, appParam?: object) {
     const url = this.signUrl(parser.apiParser, appParam)
-    let returnResult = []
+    let returnResult
     try {
       const response = await axios.post(url, appParam)
-      returnResult = response.data.data
+      const parsedJson = response.data
+      console.log('parsedJson', parsedJson);
+      if (parsedJson.error_response) {
+        console.error(parsedJson.error_response)
+      }
+      returnResult = parsedJson[parser.responseParser].result.data
     } catch (e) {
       console.error(e)
       throw new Error('解析京东api数据出现错误，详情请查看log！')

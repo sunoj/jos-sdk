@@ -1,18 +1,19 @@
 {
-  "name": "jos-sdk",
-  "version": "0.0.9",
+  "name": "jos-open",
+  "version": "0.1.1",
   "description": "nodejs sdk for jos",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "directories": {
     "test": "test"
   },
   "scripts": {
+    "build": "node_modules/.bin/tsc",
     "test": "./node_modules/.bin/mocha --require ts-node/register ---R spec -t 5000 --recursive test/**/*.test.ts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/leoliew/jos-sdk.git"
+    "url": "git+https://github.com/sunoj/jos-sdk.git"
   },
   "keywords": [
     "jos",
@@ -40,7 +41,7 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/leoliew/jos-sdk/issues"
+    "url": "https://github.com/sunoj/jos-sdk/issues"
   },
-  "homepage": "https://github.com/leoliew/jos-sdk#readme"
+  "homepage": "https://github.com/sunoj/jos-sdk#readme"
 }

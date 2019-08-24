@@ -1,22 +1,14 @@
-# jos-sdk
+# jos-open
 京东开放API nodejs sdk
 
-[![npm status](https://nodei.co/npm/jos-sdk.svg?downloads=true&stars=true&downloadRank=true)](https://www.npmjs.com/package/jos-sdk)
+[![npm status](https://nodei.co/npm/jos-open.svg?downloads=true&stars=true&downloadRank=true)](https://www.npmjs.com/package/jos-sdk)
 
 ## 安装使用
 
 ### Install
 
 ```
-$ npm install jos-sdk
-```
-
-### 获取授权
-
-请求url如下:
-```
-https://oauth.jd.com/oauth/token?grant_type=authorization_code&client_id=YOUR_CLIENT_ID&redirect_uri=YOUR_REGISTERED_REDIRECT_URI&code=GET_CODE&state=YOUR_CUSTOM_CODE&client_secret= YOUR_APP_SECRET
-
+$ npm install jos-open
 ```
 
 ### Use Example (获取商品详情)
@@ -43,11 +35,3 @@ Install dependencies:
 $ npm install
 ```
 Run em!
-
-```shell
-$ npm test
-```
-
-### 运行测试用例前需要配置
-- 拷贝 ``` test/temp_jdConfig.ts ``` 文件到 ``` test ``` 目录下, 重命名为jdConfig.ts
-- 填充好 ``` jdConfig.ts ``` 里需要的配置

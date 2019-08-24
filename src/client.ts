@@ -56,10 +56,12 @@ export class JDClient {
     return await this.handleAPI(jdParser.goodsInfo, ids) || []
   }
 
-  public async commonPromotion (params?: { ids: string[], url?: string, siteId?: string }) {
+  public async commonPromotion (params?: { materialId?: string, siteId?: string }) {
     params.siteId = params.siteId ? params.siteId : defaultConfig.siteId
 
-    const result = await this.handleAPI(jdParser.commonPromotion, params)
+    const result = await this.handleAPI(jdParser.commonPromotion, {
+      promotionCodeReq: params
+   })
     return result
   }
 
@@ -110,11 +112,10 @@ export class JDClient {
     try {
       const response = await axios.post(url, appParam)
       const parsedJson = response.data
-      console.log('parsedJson', parsedJson);
       if (parsedJson.error_response) {
         console.error(parsedJson.error_response)
       }
-      returnResult = parsedJson[parser.responseParser].result.data
+      returnResult = JSON.parse(parsedJson[parser.responseParser].result).data;
     } catch (e) {
       console.error(e)
       throw new Error('解析京东api数据出现错误，详情请查看log！')

@@ -1,33 +1,27 @@
 import * as crypto from 'crypto'
 import * as util from 'util'
 import * as querystring from 'querystring'
-import * as request from 'superagent'
+import axios from 'axios';
 import * as _ from 'lodash'
 import { Utils } from './utils'
 
 const defaultConfig = {
-  webId: '505422491',
-  unionId: '1000093271',
-  channel: 'WL',
+  siteId: "280573243",
   format: 'json',
   v: '2.0',
-  apiUrl: 'https://api.jd.com/routerjson'
+  apiUrl: 'https://router.jd.com/api'
 }
 
 const jdParser = {
   goodsInfo: {
-    apiParser: 'jingdong.service.promotion.goodsInfo',
-    responseParser: 'jingdong_service_promotion_goodsInfo_responce',
-    resultParser: 'getpromotioninfo_result',
-    returnParser: 'result'
+    apiParser: 'jd.union.open.goods.promotiongoodsinfo.query',
   },
-  batchGetCode: {
-    apiParser: 'jingdong.service.promotion.batch.getcode',
-    responseParser: 'jingdong_service_promotion_batch_getcode_responce',
-    resultParser: 'querybatch_result',
-    returnParser: 'urlList'
+  commonPromotion: {
+    apiParser: 'jd.union.open.promotion.common.get',
   }
 }
+
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 /**
  * jd client object Constructor method
@@ -60,15 +54,10 @@ export class JDClient {
     return await this.handleAPI(jdParser.goodsInfo, ids) || []
   }
 
-  public async batchGetCode (params?: { ids: string[], url?: string, webId?: string, channel?: string, unionId?: string }) {
-    params.webId = params.webId ? params.webId : defaultConfig.webId
-    params.unionId = params.unionId ? params.unionId : defaultConfig.unionId
-    params.channel = params.channel ? params.channel : defaultConfig.channel
-    params.url = Utils.formatJdUrl(params.ids, params.channel)
-    Object.assign(params, {
-      id: params.ids.join(',')
-    })
-    const result = await this.handleAPI(jdParser.batchGetCode, params)
+  public async commonPromotion (params?: { ids: string[], url?: string, siteId?: string }) {
+    params.siteId = params.siteId ? params.siteId : defaultConfig.siteId
+
+    const result = await this.handleAPI(jdParser.commonPromotion, params)
     return result
   }
 
@@ -85,8 +74,9 @@ export class JDClient {
       format: this.format,
       v: this.v,
       method: method,
+      sign_method: 'md5',
       timestamp: Utils.formatTime(new Date(),'YYYY-MM-DD HH:mm:ss'),
-      '360buy_param_json': JSON.stringify(appParam)
+      param_json: JSON.stringify(appParam)
     }
     let sign = this.appSecret
     _.keys(sysParam).forEach((key) => {
@@ -111,16 +101,12 @@ export class JDClient {
    * @param appParam
    * @returns {Promise<any>}
    */
-  private async handleAPI (parser?: { apiParser: string, responseParser: string, resultParser: string, returnParser: string }, appParam?: object) {
+  private async handleAPI (parser?: { apiParser: string }, appParam?: object) {
     const url = this.signUrl(parser.apiParser, appParam)
     let returnResult = []
     try {
-      const response = await request.post(url).set('Content-Type', 'application/json')
-      const parsedJson = JSON.parse(response.text)
-      if (parsedJson.error_response) {
-        console.error(parsedJson.error_response)
-      }
-      returnResult = JSON.parse(parsedJson[parser.responseParser][parser.resultParser])[parser.returnParser]
+      const response = await axios.post(url, appParam)
+      returnResult = response.data.data
     } catch (e) {
       console.error(e)
       throw new Error('解析京东api数据出现错误，详情请查看log！')

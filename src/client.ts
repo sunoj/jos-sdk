@@ -90,7 +90,15 @@ const jdAPI = {
   couponImportation: {
     method: 'jd.union.open.coupon.importation',
     version: '1.0'
-  }
+  },
+  couponGiftCreate: {
+    method: 'jd.union.open.coupon.gift.get',
+    version: '1.0'
+  },
+  couponGiftStop: {
+    method: 'jd.union.open.coupon.gift.stop',
+    version: '1.0'
+  },
 }
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -184,6 +192,39 @@ export class JDClient {
       pidReq: params
     }
     return await this.handleAPI(jdAPI.pidGet, requestParams)
+  }
+
+  /**
+   * 礼金创建
+   * @param params
+   */
+  public async createGiftCoupon (params: {
+    skuMaterialId: string, // 商品skuId或落地页地址
+    discount: number, // 优惠券面额，最小不可低于1元
+    amount: number, // 总数量
+    receiveStartTime: string, // 领取开始时间(yyyy-MM-dd HH)，区间为(创建当天0点直至未来6天内)，系统补充为yyyy-MM-dd HH:00:00
+    receiveEndTime: string, // 领取结束时间(yyyy-MM-dd HH)，区间为(创建当前时间点直至未来6天内)，系统补充为yyyy-MM-dd HH:59:59
+    isSpu: number, // 是否绑定同spu商品(1:是;0:否)
+    expireType: number, // 使用时间类型：1.相对时间，需配合effectiveDays一同传入；2.绝对时间，需配合useStartTime和useEndTime一同传入
+    share: number, // 每个礼金推广链接是否限制仅可领取1张礼金：-1不限，1限制
+  }) {
+    const requestParams = {
+      couponReq: params
+    }
+    return await this.handleAPI(jdAPI.couponGiftCreate, requestParams)
+  }
+
+  /**
+   * 礼金停止
+   * @param params
+   */
+  public async stopGiftCoupon (params: {
+    giftCouponKey: string, // 礼金批次ID
+  }) {
+    const requestParams = {
+      couponReq: params
+    }
+    return await this.handleAPI(jdAPI.couponGiftStop, requestParams)
   }
 
 

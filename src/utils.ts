@@ -44,7 +44,7 @@ export namespace Utils {
    */
   export function getCurrentMoment (time?) {
     Moment.tz.setDefault('Asia/Shanghai')
-    return new Moment(time)
+    return Moment(time)
   }
 
   /**

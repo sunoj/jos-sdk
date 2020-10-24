@@ -99,6 +99,10 @@ const jdAPI = {
     method: 'jd.union.open.coupon.gift.stop',
     version: '1.0'
   },
+  couponGiftQuery: {
+    method: 'jd.union.open.statistics.giftcoupon.query',
+    version: '1.0'
+  }
 }
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -225,6 +229,23 @@ export class JDClient {
       couponReq: params
     }
     return await this.handleAPI(jdAPI.couponGiftStop, requestParams)
+  }
+
+
+  /**
+   * 礼金查询
+   * @param params
+   */
+  public async queryGiftCoupon (params: {
+    giftCouponKey: string, // 礼金批次ID
+    skuId: string, // skuId和giftCouponKey二选一，不可同时入参
+    createTime: string, // 礼金创建日期（精确到天），yyyy-MM-dd
+    startTime: string, // 礼金订单下单日期，yyyy-MM-dd
+  }) {
+    const requestParams = {
+      effectDataReq: params
+    }
+    return await this.handleAPI(jdAPI.couponGiftQuery, requestParams)
   }
 
 

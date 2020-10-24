@@ -4,12 +4,12 @@
     "target": "es2017",
     "experimentalDecorators": true,
     "declaration": true,
+    "rootDir": "src",
     "outDir": "dist",
     "baseUrl": "."
   },
   "include": [
     "src/**/*",
-    "test/**/*"
   ],
   "exclude": [
     "node_modules"

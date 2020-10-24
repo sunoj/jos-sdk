@@ -210,7 +210,11 @@ export class JDClient {
     receiveEndTime: string, // 领取结束时间(yyyy-MM-dd HH)，区间为(创建当前时间点直至未来6天内)，系统补充为yyyy-MM-dd HH:59:59
     isSpu: number, // 是否绑定同spu商品(1:是;0:否)
     expireType: number, // 使用时间类型：1.相对时间，需配合effectiveDays一同传入；2.绝对时间，需配合useStartTime和useEndTime一同传入
+    effectiveDays?: number, // 使用时间类型：1.相对时间，需配合effectiveDays一同传入；2.绝对时间，需配合useStartTime和useEndTime一同传入
+    useStartTime?: string, // 消费者领取后的使用开始时间，格式：yyyy-MM-dd，系统补充为yyyy-MM-dd HH:00:00，当expireType=2时，必须设置该字段
+    useEndTime?: string, // 消费者领取后的使用开始时间，格式：yyyy-MM-dd，系统补充为yyyy-MM-dd HH:00:00，当expireType=2时，必须设置该字段
     share: number, // 每个礼金推广链接是否限制仅可领取1张礼金：-1不限，1限制
+    contentMatch?: number, // 是否允许通过内容平台推广，0：不允许，1：允许；默认为0
   }) {
     const requestParams = {
       couponReq: params

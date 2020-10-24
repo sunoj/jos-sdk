@@ -1,6 +1,6 @@
 {
   "name": "jos-open",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "nodejs sdk for jos",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

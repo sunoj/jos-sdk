@@ -242,7 +242,7 @@ export class JDClient {
    */
   public async queryGiftCoupon (params: {
     giftCouponKey: string, // 礼金批次ID
-    skuId: string, // skuId和giftCouponKey二选一，不可同时入参
+    skuId?: string, // skuId和giftCouponKey二选一，不可同时入参
     createTime: string, // 礼金创建日期（精确到天），yyyy-MM-dd
     startTime: string, // 礼金订单下单日期，yyyy-MM-dd
   }) {

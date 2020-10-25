@@ -146,7 +146,16 @@ export class JDClient {
    * 获取通用推广链接
    * @param params
    */
-  public async commonGet (params: { materialId: string, siteId?: string, positionId?: string, subUnionId?: string, ext1?: string, pid?: string, couponUrl?: string }) {
+  public async commonGet (params: {
+    materialId: string,
+    siteId?: string,
+    positionId?: string,
+    subUnionId?: string,
+    ext1?: string,
+    pid?: string,
+    couponUrl?: string
+    giftCouponKey?: string
+  }) {
     const requestParams = {
       promotionCodeReq: params
     }
